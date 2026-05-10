@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a535c" />
+  <meta name="description" content="시간표를 저장하고 등교·수업 전에 알림을 받는 앱입니다." />
+  <title>학교 시간표 알리미</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>학교 시간표 알리미</h1>
+      <p class="tagline">시간표만 넣어두면, 등교 전·수업 전에 알려드려요</p>
+    </header>
+
+    <section class="card today-card" aria-live="polite">
+      <h2>오늘 안내</h2>
+      <div id="todaySummary" class="today-summary muted">설정 후 여기에서 오늘 첫 수업 정보가 보입니다.</div>
+      <button type="button" id="btnNotifyTest" class="btn secondary">테스트 알림 보내기</button>
+    </section>
+
+    <section class="card">
+      <h2>알림</h2>
+      <label class="field">
+        <span>등교 준비 알림 · 첫 수업 시작 <strong>N분 전</strong></span>
+        <div class="row">
+          <input type="number" id="remindSchoolBeforeMin" min="5" max="180" step="5" value="60" />
+          <span class="suffix">분 전</span>
+        </div>
+      </label>
+      <label class="field checkbox">
+        <input type="checkbox" id="enablePeriodReminders" />
+        <span>각 교시 시작 전에도 알림 ( 준비용 )</span>
+      </label>
+      <label class="field indented" id="periodRemindWrap" hidden>
+        <span>각 교시 <strong>N분 전</strong></span>
+        <div class="row">
+          <input type="number" id="remindPeriodBeforeMin" min="1" max="30" step="1" value="5" />
+          <span class="suffix">분 전</span>
+        </div>
+      </label>
+      <button type="button" id="btnRequestNotify" class="btn primary">알림 허용하기</button>
+      <p id="notifyStatus" class="status muted"></p>
+    </section>
+
+    <section class="card">
+      <h2>교시별 시작 시간</h2>
+      <p class="hint">교시 개수만큼 시작 시각(HH:mm)을 맞춰 주세요.</p>
+      <div id="periodTimesGrid" class="period-grid"></div>
+      <button type="button" id="addPeriod" class="btn secondary btn-small">교시 줄 추가</button>
+      <button type="button" id="removePeriod" class="btn secondary btn-small">마지막 줄 삭제</button>
+    </section>
+
+    <section class="card">
+      <h2>주간 시간표 ( 과목 이름 )</h2>
+      <div class="table-wrap">
+        <table class="schedule-table" id="scheduleTable">
+          <thead>
+            <tr>
+              <th>교시</th>
+              <th>월</th>
+              <th>화</th>
+              <th>수</th>
+              <th>목</th>
+              <th>금</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>시간표 사진 / OCR</h2>
+      <p class="hint">사진을 올리면 한글 OCR(Tesseract.js)으로 글자를 읽습니다. 표마다 결과가 들쭉날쭉할 수 있어서 <strong>꼭 직접 확인·수정</strong> 후 저장하세요. 처음 OCR 시 언어 데이터를 받아 와서 시간이 걸릴 수 있어요.</p>
+      <label class="file-drop">
+        <input type="file" id="timetableImage" accept="image/*" hidden />
+        <span>이미지 선택</span>
+      </label>
+      <div id="imagePreview" class="image-preview"></div>
+      <div class="row ocr-buttons">
+        <button type="button" id="btnOcrRecognize" class="btn primary" disabled>사진에서 인식해서 표 채우기</button>
+        <label class="field checkbox shrink">
+          <input type="checkbox" id="ocrOverwriteSchedule" checked />
+          <span>기존 주간 과목표 덮어쓰기</span>
+        </label>
+      </div>
+      <p id="ocrProgress" class="status muted"></p>
+      <label class="field">
+        <span>인식된 텍스트 ( 필요하면 고쳐서 다시 시도 가능 )</span>
+        <textarea id="ocrRawText" rows="5" spellcheck="false" placeholder="버튼을 누르면 여기에 전체 문자가 채워집니다"></textarea>
+      </label>
+      <button type="button" id="btnApplyOcrText" class="btn secondary btn-small">위 텍스트만으로 표·시각 다시 채우기 시도</button>
+      <button type="button" id="clearImage" class="btn secondary btn-small" hidden>이미지 지우기</button>
+    </section>
+
+    <section class="card actions">
+      <button type="button" id="btnSave" class="btn primary">저장 ( 시간표 · 알림 · 사진 포함 )</button>
+      <span id="saveStatus" class="status" role="status"></span>
+    </section>
+
+    <footer class="footer muted">
+      <p>알림은 이 기기·브라우저에서만 동작합니다. 백그라운드 알림은 PWA로 홈에 추가하거나 브라우저 알림을 허용해 주세요.</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" crossorigin="anonymous"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

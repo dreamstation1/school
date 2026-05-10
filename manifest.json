@@ -1,0 +1,9 @@
+{
+  "name": "학교 시간표 알리미",
+  "short_name": "시간표 알리미",
+  "description": "시간표를 저장하고 등교·수업 전 알림을 받습니다.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#1a535c"
+}

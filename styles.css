@@ -1,0 +1,292 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0f1419;
+  --surface: #1a2230;
+  --border: #2d3a4d;
+  --text: #e8eef4;
+  --muted: #8b9cb0;
+  --accent: #4ecdc4;
+  --accent-dim: #2a8580;
+  --danger: #ff6b6b;
+  --radius: 12px;
+  --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a535c40, transparent),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+  padding: 1rem;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.header h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.hint {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.field.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field.checkbox input {
+  width: auto;
+}
+
+.field.indented {
+  margin-left: 1.5rem;
+  padding-left: 0.35rem;
+  border-left: 2px solid var(--border);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input[type="number"],
+input[type="time"],
+input[type="text"] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  min-width: 0;
+}
+
+input[type="number"] {
+  width: 6rem;
+}
+
+.period-grid input[type="time"] {
+  flex: 1;
+  max-width: 140px;
+}
+
+.suffix {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  color: #082220;
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-small {
+  padding: 0.4rem 0.65rem;
+  font-size: 0.85rem;
+  margin-right: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.status {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.today-summary strong {
+  color: var(--accent);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: -0.25rem;
+  padding: 0.25rem;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.45rem;
+  text-align: center;
+}
+
+.schedule-table thead th {
+  background: var(--bg);
+}
+
+.schedule-table th:first-child {
+  width: 2.75rem;
+  color: var(--muted);
+}
+
+.schedule-table input {
+  width: 100%;
+  max-width: 7rem;
+  margin: 0 auto;
+}
+
+.period-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.5rem;
+}
+
+.period-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.period-row label.num {
+  min-width: 2.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.file-drop {
+  display: block;
+  padding: 1.25rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.file-drop:focus-within {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.image-preview img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.ocr-buttons {
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.ocr-buttons .checkbox.shrink {
+  margin-bottom: 0;
+  font-size: 0.85rem;
+}
+
+textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 6rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.footer {
+  font-size: 0.75rem;
+  margin-top: 1.5rem;
+  line-height: 1.45;
+}
